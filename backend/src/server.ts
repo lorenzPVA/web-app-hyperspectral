@@ -31,7 +31,12 @@ if (storageMode === 'supabase') {
 const supabaseBucket = process.env.SUPABASE_STORAGE_BUCKET || 'hyperspectral-scans';
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false,
+}));
 app.use(express.json());
 
 // Log all incoming requests
