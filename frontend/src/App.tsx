@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
 import { uploadScan, listScans, deleteScan } from './api';
 import type { ScanMetadata } from './types';
+import ScanDetailPage from './ScanDetailPage';
 import './index.css';
 
-function App() {
+function AdminDashboard() {
   const [scans, setScans] = useState<ScanMetadata[]>([]);
   const [selectedScan, setSelectedScan] = useState<ScanMetadata | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -171,11 +173,23 @@ function App() {
                 </ul>
               </div>
             </div>
-            <button onClick={() => setSelectedScan(null)} className="btn-secondary">Close</button>
+            <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+              <Link to={`/scans/${selectedScan.id}`} className="btn-primary" style={{ textDecoration: 'none' }}>Open Public Page</Link>
+              <button onClick={() => setSelectedScan(null)} className="btn-secondary">Close</button>
+            </div>
           </section>
         )}
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<AdminDashboard />} />
+      <Route path="/scans/:id" element={<ScanDetailPage />} />
+    </Routes>
   );
 }
 
