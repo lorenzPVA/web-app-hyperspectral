@@ -120,3 +120,5 @@ frontend/build/
 
 # Vercel deployment
 .vercel
+
+/mock_storage
