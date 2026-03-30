@@ -213,16 +213,39 @@ button {
   margin-bottom: 1.5rem;
 }
 
-.detail-files ul, .detail-bbox ul {
+.detail-bbox ul {
   padding-left: 1.5rem;
   margin-top: 0.5rem;
 }
 
-.detail-files a {
-  color: var(--primary-color);
-  text-decoration: none;
+.file-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
 }
 
-.detail-files a:hover {
-  text-decoration: underline;
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.btn-download.secondary {
+  background-color: white;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-download.secondary:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }

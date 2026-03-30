@@ -72,10 +72,10 @@ export default function ScanDetailPage() {
 
             <div className="detail-files">
               <strong>Files:</strong>
-              <ul>
-                <li><a href={scan.storageUrlRaw} target="_blank" rel="noreferrer" className="btn-primary" style={{ display: 'inline-block', marginBottom: '0.5rem', textDecoration: 'none' }}>Download .raw</a></li>
-                <li><a href={scan.storageUrlHdr} target="_blank" rel="noreferrer" className="btn-secondary" style={{ display: 'inline-block', textDecoration: 'none' }}>Download .hdr</a></li>
-              </ul>
+              <div className="file-actions">
+                <a href={scan.storageUrlRaw} target="_blank" rel="noreferrer" className="btn-download secondary">Download .raw</a>
+                <a href={scan.storageUrlHdr} target="_blank" rel="noreferrer" className="btn-download secondary">Download .hdr</a>
+              </div>
             </div>
           </div>
         </section>
