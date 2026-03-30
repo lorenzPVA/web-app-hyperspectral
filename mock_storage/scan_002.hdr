@@ -1,1 +1,0 @@
-ENVI\ndescription = { Mock HDR }\nsamples = 100\nlines = 100\nbands = 10\nheader offset = 0\nfile type = ENVI Standard\ndata type = 4\ninterleave = bsq\nsensor type = Unknown
