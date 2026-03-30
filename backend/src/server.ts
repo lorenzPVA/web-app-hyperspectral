@@ -39,7 +39,7 @@ const corsOptions: CorsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // handle preflight
+app.options('/{*path}', cors(corsOptions));
 
 app.use(express.json());
 
