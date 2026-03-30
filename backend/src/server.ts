@@ -11,7 +11,11 @@ import { randomUUID } from 'crypto';
 const app = express();
 const prisma = new PrismaClient();
 const port = process.env.PORT || 3001;
-const storageMode = process.env.STORAGE_MODE || 'local';
+const storageMode = (process.env.STORAGE_MODE || 'local').trim();
+console.log('[CONFIG] STORAGE_MODE =', storageMode);
+console.log('[CONFIG] SUPABASE_URL =', process.env.SUPABASE_URL ? 'SET' : 'MISSING');
+console.log('[CONFIG] SUPABASE_SERVICE_ROLE_KEY =', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'SET' : 'MISSING');
+console.log('[CONFIG] DATABASE_URL =', process.env.DATABASE_URL ? 'SET' : 'MISSING');
 
 // Supabase Setup
 let supabase: any = null;
@@ -29,6 +33,12 @@ const supabaseBucket = process.env.SUPABASE_STORAGE_BUCKET || 'hyperspectral-sca
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Log all incoming requests
+app.use((req, res, next) => {
+  console.log(`[REQUEST] ${req.method} ${req.url}`);
+  next();
+});
 
 // Set up file storage mechanism based on mode
 const localUploadPath = path.join(__dirname, '../../mock_storage');
@@ -78,6 +88,7 @@ router.get('/scans/:id', async (req, res) => {
 });
 
 router.post('/scans/upload', upload.fields([{ name: 'rawFile', maxCount: 1 }, { name: 'hdrFile', maxCount: 1 }]), async (req, res) => {
+  console.log('[UPLOAD ROUTE HIT]');
   try {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     const rawFile = files?.['rawFile']?.[0];
@@ -105,6 +116,7 @@ router.post('/scans/upload', upload.fields([{ name: 'rawFile', maxCount: 1 }, { 
     let storageUrlRaw = '';
     let storageUrlHdr = '';
 
+    console.log('[UPLOAD] storageMode =', storageMode, '| supabase client =', supabase ? 'INITIALIZED' : 'NULL');
     if (storageMode === 'supabase' && supabase) {
       // Upload to Supabase Storage
       const rawKey = `${randomUUID()}${path.extname(rawFile.originalname)}`;
@@ -119,10 +131,13 @@ router.post('/scans/upload', upload.fields([{ name: 'rawFile', maxCount: 1 }, { 
       const { data: hdrPublicUrl } = supabase.storage.from(supabaseBucket).getPublicUrl(hdrKey);
       storageUrlHdr = hdrPublicUrl.publicUrl;
     } else {
+      console.log('[BRANCH] Falling through to LOCAL storage because condition failed!');
       // Local setup via diskStorage
       storageUrlRaw = `/mock_storage/${rawFile.filename}`;
       storageUrlHdr = `/mock_storage/${hdrFile.filename}`;
     }
+
+    console.log('[SCAN SAVING] Saving to DB with URLs:', { storageUrlRaw, storageUrlHdr });
 
     // Write to DB
     const scan = await prisma.scan.create({

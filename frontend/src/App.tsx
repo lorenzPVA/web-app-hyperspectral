@@ -70,7 +70,7 @@ function AdminDashboard() {
               <label>Name</label>
               <input type="text" name="name" required />
             </div>
-            
+
             <div className="form-group">
               <label>Acquisition Time</label>
               <input type="datetime-local" name="acquisitionTime" required />
@@ -154,7 +154,7 @@ function AdminDashboard() {
               <div><strong>Name:</strong> {selectedScan.name}</div>
               <div><strong>Uploaded At:</strong> {new Date(selectedScan.uploadedAt).toLocaleString()}</div>
               <div><strong>Acquisition Time:</strong> {new Date(selectedScan.acquisitionTime).toLocaleString()}</div>
-              
+
               <div className="detail-bbox">
                 <strong>Bounding Box:</strong>
                 <ul>
