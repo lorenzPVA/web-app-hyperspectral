@@ -10,26 +10,24 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "src/server.ts"
-        }
-    ],
-    "headers": [
+            "methods": [
+                "OPTIONS"
+            ],
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization"
+            },
+            "status": 200
+        },
         {
-            "source": "/(.*)",
-            "headers": [
-                {
-                    "key": "Access-Control-Allow-Origin",
-                    "value": "*"
-                },
-                {
-                    "key": "Access-Control-Allow-Methods",
-                    "value": "GET,POST,DELETE,OPTIONS"
-                },
-                {
-                    "key": "Access-Control-Allow-Headers",
-                    "value": "Content-Type, Authorization"
-                }
-            ]
+            "src": "/(.*)",
+            "dest": "src/server.ts",
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization"
+            }
         }
     ]
 }

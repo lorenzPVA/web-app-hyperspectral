@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
+import type { CorsOptions } from 'cors';
 import { PrismaClient } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
 import path from 'path';
@@ -30,13 +31,16 @@ if (storageMode === 'supabase') {
 }
 const supabaseBucket = process.env.SUPABASE_STORAGE_BUCKET || 'hyperspectral-scans';
 
-// Middleware
-app.use(cors({
+const corsOptions: CorsOptions = {
   origin: process.env.FRONTEND_URL || '*',
   methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false,
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // handle preflight
+
 app.use(express.json());
 
 // Log all incoming requests
