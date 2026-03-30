@@ -55,8 +55,10 @@ interface ScanUploadBody {
   bbox_max_lat: string;
 }
 
+const router = express.Router();
+
 // Routes
-app.get('/scans', async (req, res) => {
+router.get('/scans', async (req, res) => {
   try {
     const scans = await prisma.scan.findMany({ orderBy: { uploadedAt: 'desc' } });
     res.json(scans);
@@ -65,7 +67,7 @@ app.get('/scans', async (req, res) => {
   }
 });
 
-app.get('/scans/:id', async (req, res) => {
+router.get('/scans/:id', async (req, res) => {
   try {
     const scan = await prisma.scan.findUnique({ where: { id: parseInt(req.params.id) } });
     if (!scan) return res.status(404).json({ error: 'Scan not found' });
@@ -75,7 +77,7 @@ app.get('/scans/:id', async (req, res) => {
   }
 });
 
-app.post('/scans/upload', upload.fields([{ name: 'rawFile', maxCount: 1 }, { name: 'hdrFile', maxCount: 1 }]), async (req, res) => {
+router.post('/scans/upload', upload.fields([{ name: 'rawFile', maxCount: 1 }, { name: 'hdrFile', maxCount: 1 }]), async (req, res) => {
   try {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     const rawFile = files?.['rawFile']?.[0];
@@ -142,7 +144,7 @@ app.post('/scans/upload', upload.fields([{ name: 'rawFile', maxCount: 1 }, { nam
   }
 });
 
-app.delete('/scans/:id', async (req, res) => {
+router.delete('/scans/:id', async (req, res) => {
   try {
     const scanId = parseInt(req.params.id);
     const scan = await prisma.scan.findUnique({ where: { id: scanId } });
@@ -169,6 +171,10 @@ app.delete('/scans/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Mount routes
+app.use('/api', router);
+app.use('/', router); // fallback
 
 // Start Server locally if not required by Vercel
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
