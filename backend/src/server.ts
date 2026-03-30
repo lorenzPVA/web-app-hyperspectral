@@ -51,8 +51,11 @@ app.use((req, res, next) => {
 
 // Set up file storage mechanism based on mode
 const localUploadPath = path.join(__dirname, '../../mock_storage');
-if (!fs.existsSync(localUploadPath)) {
-  fs.mkdirSync(localUploadPath, { recursive: true });
+
+if (storageMode !== 'supabase') {
+  if (!fs.existsSync(localUploadPath)) {
+    fs.mkdirSync(localUploadPath, { recursive: true });
+  }
 }
 
 const storage = storageMode === 'supabase' ? multer.memoryStorage() : multer.diskStorage({
